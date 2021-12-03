@@ -37,7 +37,7 @@ with col2:
     end_date = st.selectbox('End Date', arr_df['Date'].unique())
 
 # Brand Option
-select_brand = st.multiselect('Brand', sorted(arr_df['Brand'].unique()))
+select_brand = st.multiselect('Brand', arr_df['Brand'].unique())
 if len(select_brand) > 0:
     select_brand = select_brand
 else:
@@ -45,7 +45,7 @@ else:
 
 # Company Name Option
 select_account = st.multiselect('Account Name', 
-                                sorted(arr_df['Company Name'].unique()))
+                                arr_df['Company Name'].unique())
 if len(select_account) > 0:
     select_account = select_account
 else:
