@@ -9,10 +9,14 @@ from plotly import tools
 import plotly.offline as py
 import streamlit as st
 
+# Jolt Hex Color Codes: 
+# Blue: #0077C8
+# Green: #00B74F
+
 st.title('ARR Dashboard')
 
 # Create drag-and-drop file import functionality
-df = st.file_uploader('Select a CSV file to import (Default provided)')
+df = st.sidebar.file_uploader('Select a CSV file to import (Default provided)')
 @st.cache()
 def load_file(df):
     if df is not None:
@@ -29,23 +33,22 @@ df = load_file(df)
 arr_df = df.copy()
 arr_df['Date'] = pd.to_datetime(arr_df['Date']).dt.date
 
-# Create beginning and end date drop downs side-by-side
-col1, col2 = st.columns(2)
-with col1:
-    start_date = st.selectbox('Start Date', arr_df['Date'].unique())
-with col2:
-    end_date = st.selectbox('End Date', arr_df['Date'].unique())
+# Create beginning and end date drop downs
+start_date = st.sidebar.selectbox('Start Date', arr_df['Date'].unique())
+end_date = st.sidebar.selectbox('End Date', arr_df['Date'].unique()[::-1])
 
 # Brand Option
-select_brand = st.multiselect('Brand', arr_df['Brand'].unique())
+select_brand = st.sidebar.multiselect('Brand', arr_df['Brand'].unique(),
+                                      help='Select one or many')
 if len(select_brand) > 0:
     select_brand = select_brand
 else:
     select_brand = arr_df['Brand'].unique()
 
 # Company Name Option
-select_account = st.multiselect('Account Name', 
-                                arr_df['Company Name'].unique())
+select_account = st.sidebar.multiselect('Account Name', 
+                                        arr_df['Company Name'].unique(),
+                                        help='Select one or many')
 if len(select_account) > 0:
     select_account = select_account
 else:
@@ -78,6 +81,7 @@ fig1 = px.bar(arr_viz,
 )
 fig1.update_xaxes(title='', showgrid=False)
 fig1.update_yaxes(title='', showgrid=False)
+
 st.plotly_chart(fig1)
 
 # Data frame of all data that fit within chosen parameters
@@ -127,11 +131,10 @@ fig2 = px.bar(churn_viz,
               y='MRR Churn',
               barmode='stack',
               color='Type',
-              title='MRR Churn by Month',
+              title='MRR Churn by Month'
 )
 fig2.update_xaxes(title='', showgrid=False)
 fig2.update_yaxes(title='', showgrid=False)
-st.plotly_chart(fig2)
 
 # MRR churn distrbution (box plot)
 fig3, ax3 = plt.subplots()
@@ -146,7 +149,14 @@ fig3 = px.scatter(churn_df,
 )
 fig3.update_xaxes(title='', showgrid=False)
 fig3.update_yaxes(title='', showgrid=False)
-st.plotly_chart(fig3)
+
+# Arrange layout and plot churn charts
+col1, col2 = st.columns(2)
+with col1:
+    st.plotly_chart(fig2)
+with col2:
+    st.plotly_chart(fig3)
+
 
 # Drop `MRR Churn` column to keep df consistent as above
 churn_df = churn_df.drop(['MRR Churn', 'Type'], axis=1)
