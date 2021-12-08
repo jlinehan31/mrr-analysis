@@ -13,7 +13,7 @@ import streamlit as st
 # Blue: #0077C8
 # Green: #00B74F
 
-st.set_page_config(layout='wide')
+# st.set_page_config(layout='wide')
 st.title('ARR Dashboard')
 
 # Create drag-and-drop file import functionality
