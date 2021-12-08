@@ -152,12 +152,14 @@ fig3.update_xaxes(title='', showgrid=False)
 fig3.update_yaxes(title='', showgrid=False)
 
 # Arrange layout and plot churn charts
-col1, col2 = st.columns(2)
-with col1:
-    st.plotly_chart(fig2)
-with col2:
-    st.plotly_chart(fig3)
+# col1, col2 = st.columns(2)
+# with col1:
+#     st.plotly_chart(fig2)
+# with col2:
+#     st.plotly_chart(fig3)
 
+st.plotly_chart(fig2)
+st.plotly_chart(fig3)
 
 # Drop `MRR Churn` column to keep df consistent as above
 churn_df = churn_df.drop(['MRR Churn', 'Type'], axis=1)
